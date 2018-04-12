@@ -1,0 +1,70 @@
+@page "{id:int?}"
+@model SpecSelRepos.Pages.SpecSelResults.DeleteModel
+
+@{
+    ViewData["Title"] = "Delete";
+}
+
+<h2>Delete</h2>
+
+<h3>Are you sure you want to delete this?</h3>
+<div>
+    <h4>SpecSelResult</h4>
+    <hr />
+    <dl class="dl-horizontal">
+        <dt>
+            @Html.DisplayNameFor(model => model.SpecSelResult.DataSet)
+        </dt>
+        <dd>
+            @Html.DisplayFor(model => model.SpecSelResult.DataSet)
+        </dd>
+        <dt>
+            @Html.DisplayNameFor(model => model.SpecSelResult.NumSpecies)
+        </dt>
+        <dd>
+            @Html.DisplayFor(model => model.SpecSelResult.NumSpecies)
+        </dd>
+        <dt>
+            @Html.DisplayNameFor(model => model.SpecSelResult.NumResources)
+        </dt>
+        <dd>
+            @Html.DisplayFor(model => model.SpecSelResult.NumResources)
+        </dd>
+        <dt>
+            @Html.DisplayNameFor(model => model.SpecSelResult.Option)
+        </dt>
+        <dd>
+            @Html.DisplayFor(model => model.SpecSelResult.Option)
+        </dd>
+        <dt>
+            @Html.DisplayNameFor(model => model.SpecSelResult.SpeciesThresholdM)
+        </dt>
+        <dd>
+            @Html.DisplayFor(model => model.SpecSelResult.SpeciesThresholdM)
+        </dd>
+        <dt>
+            @Html.DisplayNameFor(model => model.SpecSelResult.SdThresholdX)
+        </dt>
+        <dd>
+            @Html.DisplayFor(model => model.SpecSelResult.SdThresholdX)
+        </dd>
+        <dt>
+            @Html.DisplayNameFor(model => model.SpecSelResult.AreaPrecisionThresholdY)
+        </dt>
+        <dd>
+            @Html.DisplayFor(model => model.SpecSelResult.AreaPrecisionThresholdY)
+        </dd>
+        <dt>
+            @Html.DisplayNameFor(model => model.SpecSelResult.Output)
+        </dt>
+        <dd>
+            @Html.DisplayFor(model => model.SpecSelResult.Output)
+        </dd>
+    </dl>
+    
+    <form method="post">
+        <input type="hidden" asp-for="SpecSelResult.ID" />
+        <input type="submit" value="Delete" class="btn btn-default" /> |
+        <a asp-page="./Index">Back to List</a>
+    </form>
+</div>

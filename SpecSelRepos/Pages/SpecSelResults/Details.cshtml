@@ -1,0 +1,67 @@
+@page "{id:int?}"
+@model SpecSelRepos.Pages.SpecSelResults.DetailsModel
+
+@{
+    ViewData["Title"] = "Details";
+}
+
+<h2>Details</h2>
+
+<div>
+    <h4>SpecSelResult</h4>
+    <hr />
+    <dl class="dl-horizontal">
+        <dt>
+            @Html.DisplayNameFor(model => model.SpecSelResult.DataSet)
+        </dt>
+        <dd>
+            @Html.DisplayFor(model => model.SpecSelResult.DataSet)
+        </dd>
+        <dt>
+            @Html.DisplayNameFor(model => model.SpecSelResult.NumSpecies)
+        </dt>
+        <dd>
+            @Html.DisplayFor(model => model.SpecSelResult.NumSpecies)
+        </dd>
+        <dt>
+            @Html.DisplayNameFor(model => model.SpecSelResult.NumResources)
+        </dt>
+        <dd>
+            @Html.DisplayFor(model => model.SpecSelResult.NumResources)
+        </dd>
+        <dt>
+            @Html.DisplayNameFor(model => model.SpecSelResult.Option)
+        </dt>
+        <dd>
+            @Html.DisplayFor(model => model.SpecSelResult.Option)
+        </dd>
+        <dt>
+            @Html.DisplayNameFor(model => model.SpecSelResult.SpeciesThresholdM)
+        </dt>
+        <dd>
+            @Html.DisplayFor(model => model.SpecSelResult.SpeciesThresholdM)
+        </dd>
+        <dt>
+            @Html.DisplayNameFor(model => model.SpecSelResult.SdThresholdX)
+        </dt>
+        <dd>
+            @Html.DisplayFor(model => model.SpecSelResult.SdThresholdX)
+        </dd>
+        <dt>
+            @Html.DisplayNameFor(model => model.SpecSelResult.AreaPrecisionThresholdY)
+        </dt>
+        <dd>
+            @Html.DisplayFor(model => model.SpecSelResult.AreaPrecisionThresholdY)
+        </dd>
+        <dt>
+            @Html.DisplayNameFor(model => model.SpecSelResult.Output)
+        </dt>
+        <dd>
+            <pre>@Html.DisplayTextFor(model => model.SpecSelResult.Output)</pre>
+        </dd>
+    </dl>
+</div>
+<div>
+    <a asp-page="./Edit" asp-route-id="@Model.SpecSelResult.ID">Edit</a> |
+    <a asp-page="./Index">Back to List</a>
+</div>

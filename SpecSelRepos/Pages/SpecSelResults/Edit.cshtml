@@ -1,0 +1,70 @@
+@page "{id:int?}"
+@model SpecSelRepos.Pages.SpecSelResults.EditModel
+
+@{
+    ViewData["Title"] = "Edit";
+}
+
+<h2>Edit</h2>
+
+<h4>SpecSelResult</h4>
+<hr />
+<div class="row">
+    <div class="col-md-4">
+        <form method="post">
+            <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+            <input type="hidden" asp-for="SpecSelResult.ID" />
+            <div class="form-group">
+                <label asp-for="SpecSelResult.DataSet" class="control-label"></label>
+                <input asp-for="SpecSelResult.DataSet" class="form-control" />
+                <span asp-validation-for="SpecSelResult.DataSet" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="SpecSelResult.NumSpecies" class="control-label"></label>
+                <input asp-for="SpecSelResult.NumSpecies" class="form-control" />
+                <span asp-validation-for="SpecSelResult.NumSpecies" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="SpecSelResult.NumResources" class="control-label"></label>
+                <input asp-for="SpecSelResult.NumResources" class="form-control" />
+                <span asp-validation-for="SpecSelResult.NumResources" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="SpecSelResult.Option" class="control-label"></label>
+                <input asp-for="SpecSelResult.Option" class="form-control" />
+                <span asp-validation-for="SpecSelResult.Option" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="SpecSelResult.SpeciesThresholdM" class="control-label"></label>
+                <input asp-for="SpecSelResult.SpeciesThresholdM" class="form-control" />
+                <span asp-validation-for="SpecSelResult.SpeciesThresholdM" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="SpecSelResult.SdThresholdX" class="control-label"></label>
+                <input asp-for="SpecSelResult.SdThresholdX" class="form-control" />
+                <span asp-validation-for="SpecSelResult.SdThresholdX" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="SpecSelResult.AreaPrecisionThresholdY" class="control-label"></label>
+                <input asp-for="SpecSelResult.AreaPrecisionThresholdY" class="form-control" />
+                <span asp-validation-for="SpecSelResult.AreaPrecisionThresholdY" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="SpecSelResult.Output" class="control-label"></label>
+                <textarea asp-for="SpecSelResult.Output" class="form-control"></textarea>
+                <span asp-validation-for="SpecSelResult.Output" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <input type="submit" value="Save" class="btn btn-default" />
+            </div>
+        </form>
+    </div>
+</div>
+
+<div>
+    <a asp-page="./Index">Back to List</a>
+</div>
+
+@section Scripts {
+    @{await Html.RenderPartialAsync("_ValidationScriptsPartial");}
+}

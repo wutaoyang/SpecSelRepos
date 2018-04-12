@@ -1,0 +1,88 @@
+@page "{id:int?}"
+@model SpecSelRepos.Pages.SpecSelResults.IndexModel
+
+@{
+    ViewData["Title"] = "Index";
+}
+
+<h2>Index</h2>
+
+<p>
+    <a asp-page="Create">Create New</a>
+</p>
+
+<form>
+    <p>
+        Data Set: <input type="text" name="SearchString">
+
+
+        Option:
+        <select asp-for="SpecSelResultOption" asp-items="Model.Options">
+            <option value="">All</option>
+        </select>
+
+        <input type="submit" value="Filter" />
+    </p>
+</form>
+
+<table class="table">
+    <thead>
+        <tr>
+            <th>
+                @Html.DisplayNameFor(model => model.SpecSelResult[0].DataSet)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.SpecSelResult[0].NumSpecies)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.SpecSelResult[0].NumResources)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.SpecSelResult[0].Option)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.SpecSelResult[0].SpeciesThresholdM)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.SpecSelResult[0].SdThresholdX)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.SpecSelResult[0].AreaPrecisionThresholdY)
+            </th>
+            <th></th>
+        </tr>
+    </thead>
+    <tbody>
+        @foreach (var item in Model.SpecSelResult)
+        {
+            <tr>
+                <td>
+                    @Html.DisplayFor(modelItem => item.DataSet)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.NumSpecies)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.NumResources)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.Option)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.SpeciesThresholdM)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.SdThresholdX)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.AreaPrecisionThresholdY)
+                </td>
+                <td>
+                    <a asp-page="./Edit" asp-route-id="@item.ID">Edit</a> |
+                    <a asp-page="./Details" asp-route-id="@item.ID">Details</a> |
+                    <a asp-page="./Delete" asp-route-id="@item.ID">Delete</a>
+                </td>
+            </tr>
+        }
+    </tbody>
+</table>
