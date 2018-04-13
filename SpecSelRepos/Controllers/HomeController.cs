@@ -15,14 +15,12 @@ namespace SpecSelRepos.Controllers
         public IActionResult About()
         {
             ViewData["Message"] = "Species Selection Repository About Page";
-
             return View();
         }
 
         public IActionResult Contact()
         {
             ViewData["Message"] = "Species Selection Repository Contact Page";
-
             return View();
         }
 

@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.Security.Claims;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Authentication;
@@ -22,6 +23,7 @@ namespace SpecSelRepos.Controllers
         private readonly RoleManager<IdentityRole> _roleManager;
         private readonly IEmailSender _emailSender;
         private readonly ILogger _logger;
+        //private ManageRolesViewModel viewModel;
 
         public AccountController(
             UserManager<ApplicationUser> userManager,
@@ -41,8 +43,8 @@ namespace SpecSelRepos.Controllers
         public IActionResult ManageRoles()
         {
             ViewData["Message"] = "User Role Management Page";
-
-            return View();
+            ManageRolesViewModel viewModel = new ManageRolesViewModel(_userManager, _roleManager);
+            return View(viewModel);
         }
 
         /// <summary>
@@ -99,6 +101,14 @@ namespace SpecSelRepos.Controllers
             return Json("User " + email + " does not hold role " + role);
         }
 
+        //[Authorize(Roles = ADMIN)]
+        //public async Task<IActionResult> AssignRole()//string email, string role
+        //{
+        //    string email = viewModel.ManageRolesUser;
+        //    string role = viewModel.ManageRolesRole;
+        //    return await AssignRole(email, role);
+        //}
+
 
         /// <summary>
         /// Assign a role to a user
@@ -107,21 +117,45 @@ namespace SpecSelRepos.Controllers
         /// <param name="role"></param>
         /// <returns></returns>
         [Authorize(Roles = ADMIN)]
-        public async Task<IActionResult> AssignRole(string email, string role)
+        private async Task<IActionResult> AssignRole(string email, string role)//string email, string role
         {
-            ApplicationUser user = await _userManager.FindByEmailAsync(email);
+            ApplicationUser user = GetUserByEmail(email);
             if(null == user)
             {
                 return Content("No user with given email:" + email);
             }
-
             // if the role exists, assign the role to the user
-            if (await _roleManager.RoleExistsAsync(role) && !User.IsInRole(role))
+            if (await _roleManager.RoleExistsAsync(role))
             {
-                await _userManager.AddToRoleAsync(user, role);
+                if(!await _userManager.IsInRoleAsync(user, role))
+                {
+                    await _userManager.AddToRoleAsync(user, role);
+                    return Content("Role assigned: " + GetUserRoles(user));
+                }
+                else
+                {
+                    return Content ("User is in role: " + role + ": " + GetUserRoles(user));
+                }
+            }
+            else
+            {
+                return Content("Role: " + role + " does not exist");
             }
 
-            return Json(await _userManager.GetRolesAsync(user));
+            //return Json("no action: " + await _userManager.GetRolesAsync(user));
+        }
+
+        private string GetUserRoles(ApplicationUser user)
+        {
+            IList<string> list = _userManager.GetRolesAsync(user).Result;
+            string[] array = new string[list.Count];
+            list.CopyTo(array, 0);
+            return "[" + string.Join(",", array) + "]";
+        }
+
+        private ApplicationUser GetUserByEmail(string email)
+        {
+            return _userManager.FindByEmailAsync(email).Result;
         }
 
         /// <summary>
