@@ -165,6 +165,7 @@ namespace SpecSelRepos.Controllers
 
         /// <summary>
         /// Sets user with email to the administrator if no admin currently exists
+        /// Following successful call to this method the user must log out and back in in order to make use of admin priveleges
         /// </summary>
         /// <param name="email"></param>
         /// <returns></returns>
@@ -176,11 +177,11 @@ namespace SpecSelRepos.Controllers
                 // create the admin role if it doesnt exist
                 if (!await _roleManager.RoleExistsAsync(ADMIN))
                 {
-                    await AddRemoveRole(ADMIN);
+                    await _roleManager.CreateAsync(new IdentityRole(ADMIN));//create role
                 }
                 // assign admin role to email user
                 await AssignRole(email, ADMIN);
-                return RedirectToAction("ManageRoles", "Account");
+                return Content("User " + email + " is now the first site "+ ADMIN +". If logged in, please log out and back in to activate admin privileges.");
             }
             return Json("An admin exists - Contact admin to modify user privileges.");
         }
