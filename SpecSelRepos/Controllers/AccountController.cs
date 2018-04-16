@@ -17,7 +17,7 @@ namespace SpecSelRepos.Controllers
     [Route("[controller]/[action]")]
     public class AccountController : Controller
     {
-        private const string ADMIN = "admin";
+        public const string ADMIN = "admin";
         private readonly UserManager<ApplicationUser> _userManager;
         private readonly SignInManager<ApplicationUser> _signInManager;
         private readonly RoleManager<IdentityRole> _roleManager;
@@ -48,21 +48,31 @@ namespace SpecSelRepos.Controllers
         }
 
         /// <summary>
-        /// Method to add roles to the database
+        /// Method adds role to the database if it doesn't exist or removes it if it does exist - cannot remove ADMIN
         /// from: https://forums.asp.net/t/2132158.aspx?add+users+and+roles+in+asp+net+core+2+0+
         /// url to invoke action: https://localhost:44327/account/addrole?role=admin (44327 could be any port)
         /// </summary>
         /// <param name="role"></param>
         /// <returns></returns>
         [Authorize(Roles = ADMIN)]
-        public async Task<IActionResult> AddRole(string role)
+        public async Task<IActionResult> AddRemoveRole(string role)
         {
-            if (!await _roleManager.RoleExistsAsync(role))
+            if (null != role)
             {
-                await _roleManager.CreateAsync(new IdentityRole(role));
-                return Json(_roleManager.Roles);
+                if (!await _roleManager.RoleExistsAsync(role))
+                {
+                    await _roleManager.CreateAsync(new IdentityRole(role));//create role
+                }
+                else
+                {
+                    if (role != ADMIN)// dont delete admin role
+                    {
+                        IdentityRole iRole = await _roleManager.FindByNameAsync(role);
+                        await _roleManager.DeleteAsync(iRole);//delete role
+                    }
+                }
             }
-            return Json("The role " + role + " exists");
+            return RedirectToAction("ManageRoles", "Account");
         }
 
         /// <summary>
@@ -74,12 +84,7 @@ namespace SpecSelRepos.Controllers
         [Authorize(Roles = ADMIN)]
         public async Task<IActionResult> RemoveUserRole(string email, string role)
         {
-            if(!UserIsAdmin())
-            {
-                return Json("Admin only operation");
-            }
-
-            ApplicationUser user = await _userManager.FindByEmailAsync(email);
+            ApplicationUser user = GetUserByEmail(email);
             if (null == user)
             {
                 return Json("No user with username: " + email);
@@ -88,27 +93,13 @@ namespace SpecSelRepos.Controllers
             if (await _userManager.IsInRoleAsync(user, role))
             {
                 await _userManager.RemoveFromRoleAsync(user, role);
-
-                string message = "User: " + email + " has roles: ";
-                var userRoles = await _userManager.GetRolesAsync(user);
-
-                foreach (string str in userRoles)
-                {
-                    message += str + " ";
-                }
-                return Json(message);
+                //IList<string> userRoles = await _userManager.GetRolesAsync(user);
+                //string message = "User: " + email + " has roles: " + ListToString(userRoles);
+                //return Content(message);
+                return RedirectToAction("ManageRoles", "Account");
             }
-            return Json("User " + email + " does not hold role " + role);
+            return Content("User " + email + " does not hold role " + role);
         }
-
-        //[Authorize(Roles = ADMIN)]
-        //public async Task<IActionResult> AssignRole()//string email, string role
-        //{
-        //    string email = viewModel.ManageRolesUser;
-        //    string role = viewModel.ManageRolesRole;
-        //    return await AssignRole(email, role);
-        //}
-
 
         /// <summary>
         /// Assign a role to a user
@@ -117,37 +108,51 @@ namespace SpecSelRepos.Controllers
         /// <param name="role"></param>
         /// <returns></returns>
         [Authorize(Roles = ADMIN)]
-        private async Task<IActionResult> AssignRole(string email, string role)//string email, string role
+        public async Task<IActionResult> AssignRole(string email, string role)
         {
+            // check for a null value - might not be required after debugging complete
+            if (null == email || null == role)
+            {
+                if (null == email) { email = "null"; }
+                if (null == role) { role = "null"; }
+                return Content("A null value was passed - email: " + email + ", role: " + role);
+            }
+
+            // process request
             ApplicationUser user = GetUserByEmail(email);
-            if(null == user)
+            if (null == user)
             {
                 return Content("No user with given email:" + email);
             }
             // if the role exists, assign the role to the user
             if (await _roleManager.RoleExistsAsync(role))
             {
-                if(!await _userManager.IsInRoleAsync(user, role))
+                if (!await _userManager.IsInRoleAsync(user, role))
                 {
                     await _userManager.AddToRoleAsync(user, role);
-                    return Content("Role assigned: " + GetUserRoles(user));
+                    //return Content("Role assigned: " + GetUserRoles(user));
+
+                    return RedirectToAction("ManageRoles", "Account");
                 }
                 else
                 {
-                    return Content ("User is in role: " + role + ": " + GetUserRoles(user));
+                    return Content("User is in role: " + role + ": " + GetUserRoles(user));
                 }
             }
             else
             {
                 return Content("Role: " + role + " does not exist");
             }
-
-            //return Json("no action: " + await _userManager.GetRolesAsync(user));
         }
 
         private string GetUserRoles(ApplicationUser user)
         {
             IList<string> list = _userManager.GetRolesAsync(user).Result;
+            return ListToString(list);
+        }
+
+        private string ListToString(IList<string> list)
+        {
             string[] array = new string[list.Count];
             list.CopyTo(array, 0);
             return "[" + string.Join(",", array) + "]";
@@ -165,20 +170,19 @@ namespace SpecSelRepos.Controllers
         /// <returns></returns>
         public async Task<IActionResult> CreateAdmin(string email)
         {
-            var adminUsers = await _userManager.GetUsersInRoleAsync(ADMIN);
-
-            if(adminUsers.Count < 1)
+            IList<ApplicationUser> adminUsers = await _userManager.GetUsersInRoleAsync(ADMIN);
+            if (adminUsers.Count < 1)
             {
                 // create the admin role if it doesnt exist
                 if (!await _roleManager.RoleExistsAsync(ADMIN))
                 {
-                    await AddRole(ADMIN);
+                    await AddRemoveRole(ADMIN);
                 }
                 // assign admin role to email user
-                return Json(await AssignRole(email, ADMIN));
+                await AssignRole(email, ADMIN);
+                return RedirectToAction("ManageRoles", "Account");
             }
-
-            return Json("An admin exists");
+            return Json("An admin exists - Contact admin to modify user privileges.");
         }
 
         /// <summary>

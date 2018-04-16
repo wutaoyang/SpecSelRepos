@@ -1,6 +1,8 @@
 ﻿using Microsoft.AspNetCore.Identity;
+using Microsoft.AspNetCore.Mvc.RazorPages;
 using Microsoft.AspNetCore.Mvc.Rendering;
 using System.Collections.Generic;
+using System.Diagnostics;
 using System.Linq;
 using System.Threading.Tasks;
 
@@ -23,7 +25,7 @@ namespace SpecSelRepos.Models.AccountViewModels
         }
 
 
-        public IList<ApplicationUser> DbUsers { get; set; }
+        //public IList<ApplicationUser> DbUsers { get; set; }
         //public List<string> DbRoles { get; set; }
 
         public SelectList Users;
@@ -37,7 +39,6 @@ namespace SpecSelRepos.Models.AccountViewModels
             var users = _userManager.GetUsersInRoleAsync(role).Result.ToList();
             return users;
         }
-
 
 
     }

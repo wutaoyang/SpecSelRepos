@@ -1,15 +1,15 @@
-using System;
-using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.RazorPages;
-using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.EntityFrameworkCore;
+using SpecSelRepos.Controllers;
 using SpecSelRepos.Models;
 
 namespace SpecSelRepos.Pages.SpecSelResults
 {
+    [Authorize(Roles = AccountController.ADMIN)]
     public class EditModel : PageModel
     {
         private readonly SpecSelRepos.Models.SpecSelResultContext _context;

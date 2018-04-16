@@ -3,37 +3,50 @@
 @{
     ViewData["Title"] = "Manage Roles";
 }
-<h2>@ViewData["Title"]</h2>
-<h3>@ViewData["Message"]</h3>
 
-<form method="post">
-    <fieldset>
-        <label for="textRoleName">Role name:</label><br />
-        <input type="text" value="" name="textRoleName" /> &nbsp;
-        <input type="submit" value="Create Role" name="buttonCreateRole" />
-        <input type="submit" value="Delete Role" name="buttonDeleteRole" />
-    </fieldset>
+<h2>@ViewData["Message"]</h2>
+
+<fieldset>
+    @using (Html.BeginForm("AddRemoveRole", "Account", FormMethod.Get))
+    {
+        <span>
+            <label for="role">Role name:</label>
+            <input type="text" value="" name="role" />
+        </span>
+        <input type="submit" value="Create/Delete Role" name="buttonCreateDeleteRole" />
+    }
+</fieldset>
     <p></p>
 
     <fieldset>
-        <label for="selectUserName">Users:</label>
-        <select asp-for="ManageRolesUser" asp-items="Model.Users"></select>
-        &nbsp;
-        <label for="selectRoleName">Roles:</label>
-        <select asp-for="ManageRolesRole" asp-items="Model.Roles"></select>
-        &nbsp;
-
-        @using (Html.BeginForm("AssignRole", "Account"))
+        @using (Html.BeginForm("AssignRole", "Account", FormMethod.Get))
         {
-        <input type="submit" value="Add User to Role" name="buttonAddUserToRole">
+        <span>
+            <label for="email">Users:</label>
+            @Html.DropDownList("email", @Model.Users)
+        </span>
+        <span>
+            <label for="role">Roles:</label>
+            @Html.DropDownList("role", @Model.Roles)
+        </span>
+        <input type="submit" value="Add User to Role" name="assignRole" />
         }
+    </fieldset>
 
-        <input type="submit" value="Delete User from Role" name="buttonDeleteUserFromRole" />
 
-        <button class="btn btn-info" type="button" name="assignRole" onclick="location.href='@Url.Action("AssignRole", "Account")'"></button>
-
-        @Html.ActionLink("Assign Role", "AssignRole", "Account")
-
+    <fieldset>
+        @using (Html.BeginForm("RemoveUserRole", "Account", FormMethod.Get))
+        {
+        <span>
+            <label for="email">Users:</label>
+            @Html.DropDownList("email", @Model.Users)
+        </span>
+        <span>
+            <label for="role">Roles:</label>
+            @Html.DropDownList("role", @Model.Roles)
+        </span>
+        <input type="submit" value="Delete User from Role" name="removeRole" />
+        }
     </fieldset>
 
     <h2>Roles</h2>
@@ -54,8 +67,8 @@
                 </ul>
             </li>
         </ul>
-        }
+    }
     <p><a href="@Href("~/Home")">Return to home page</a></p>
 
-</form>
+
 

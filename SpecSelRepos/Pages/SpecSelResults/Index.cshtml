@@ -7,10 +7,12 @@
 
 <h2>Index</h2>
 
-<p>
-    <a asp-page="Create">Create New</a>
-</p>
-
+@if (User.IsInRole("admin"))
+{
+    <p>
+        <a asp-page="Create">Create New</a>
+    </p>
+}
 <form>
     <p>
         Data Set: <input type="text" name="SearchString">
@@ -78,9 +80,14 @@
                     @Html.DisplayFor(modelItem => item.AreaPrecisionThresholdY)
                 </td>
                 <td>
-                    <a asp-page="./Edit" asp-route-id="@item.ID">Edit</a> |
-                    <a asp-page="./Details" asp-route-id="@item.ID">Details</a> |
-                    <a asp-page="./Delete" asp-route-id="@item.ID">Delete</a>
+                    <a asp-page="./Details" asp-route-id="@item.ID">Details</a>
+                    @if (User.IsInRole("admin"))
+                    {
+                        <a>|</a>
+                        <a asp-page="./Edit" asp-route-id="@item.ID">Edit</a> <a>|</a>
+                        <a asp-page="./Delete" asp-route-id="@item.ID">Delete</a>
+                    }
+
                 </td>
             </tr>
         }

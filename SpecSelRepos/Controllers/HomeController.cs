@@ -5,6 +5,7 @@ using SpecSelRepos.Models;
 
 namespace SpecSelRepos.Controllers
 {
+
     public class HomeController : Controller
     {
         public IActionResult Index()
