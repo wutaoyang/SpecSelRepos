@@ -1,8 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
-using Microsoft.AspNetCore.Authorization;
+﻿using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 
 namespace SpecSelRepos.Controllers
@@ -11,9 +7,23 @@ namespace SpecSelRepos.Controllers
     [Route("[controller]/[action]")]
     public class DownloadController : Controller
     {
-        public IActionResult Index()
+        
+        public FileResult SpecSel()
         {
-            return View();
+            var fileName = $"SpeciesSelection.jar";
+            var filepath = $"Download/{fileName}";
+            byte[] fileBytes = System.IO.File.ReadAllBytes(filepath);
+            return File(fileBytes, "application/jar", fileName);
+        }
+
+
+
+        public FileResult ReadMe()
+        {
+            var fileName = $"ReadMe_2.1.txt";
+            var filepath = $"Download/{fileName}";
+            byte[] fileBytes = System.IO.File.ReadAllBytes(filepath);
+            return File(fileBytes, "application/txt", fileName);
         }
     }
 }
