@@ -33,3 +33,9 @@
         display: none;
     }
 }
+
+
+/* Display Input table without wrapping on Details.cshtml page */
+.inputTable {
+    display: inline-block;
+}

@@ -20,6 +20,11 @@
                 <span asp-validation-for="SpecSelResult.DataSet" class="text-danger"></span>
             </div>
             <div class="form-group">
+                <label asp-for="SpecSelResult.Input" class="control-label"></label>
+                <textarea asp-for="SpecSelResult.Input" class="form-control"></textarea>
+                <span asp-validation-for="SpecSelResult.Input" class="text-danger"></span>
+            </div>
+            <div class="form-group">
                 <label asp-for="SpecSelResult.NumSpecies" class="control-label"></label>
                 <input asp-for="SpecSelResult.NumSpecies" class="form-control" />
                 <span asp-validation-for="SpecSelResult.NumSpecies" class="text-danger"></span>

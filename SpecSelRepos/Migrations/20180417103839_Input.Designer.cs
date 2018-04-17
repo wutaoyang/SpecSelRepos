@@ -11,9 +11,10 @@ using System;
 namespace SpecSelRepos.Migrations
 {
     [DbContext(typeof(SpecSelResultContext))]
-    partial class SpecSelResultContextModelSnapshot : ModelSnapshot
+    [Migration("20180417103839_Input")]
+    partial class Input
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder

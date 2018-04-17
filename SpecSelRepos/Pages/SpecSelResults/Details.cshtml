@@ -10,7 +10,8 @@
 <div>
     <h4>SpecSelResult</h4>
     <hr />
-    <dl class="dl-horizontal">
+    <dl>
+        <!-- class="dl-horizontal"-->
         <dt>
             @Html.DisplayNameFor(model => model.SpecSelResult.DataSet)
         </dt>
@@ -59,6 +60,14 @@
         <dd>
             <pre>@Html.DisplayTextFor(model => model.SpecSelResult.Output)</pre>
         </dd>
+        <dt>
+            @Html.DisplayNameFor(model => model.SpecSelResult.Input)
+        </dt>
+        <div class="inputTable">
+            <dd>
+                <pre>@Html.DisplayTextFor(model => model.SpecSelResult.Input)</pre>
+            </dd>
+        </div>
     </dl>
 </div>
 <div>

@@ -10,6 +10,9 @@ namespace SpecSelRepos.Models
         [StringLength(60, MinimumLength = 3), Display(Name = "Data Set"), Required]
         public string DataSet { get; set; }
 
+        [DataType(DataType.MultilineText), Required]
+        public string Input { get; set; }
+
         [Display(Name = "No. Species"), Range(1, int.MaxValue), RegularExpression(@"^[1-9]\d*$")]
         public int NumSpecies { get; set; }
 

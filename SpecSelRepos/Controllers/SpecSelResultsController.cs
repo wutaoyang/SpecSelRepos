@@ -11,27 +11,6 @@ namespace SpecSelRepos.Controllers
             return View();
         }
 
-        //public IActionResult Details()
-        //{
-        //    return View();
-        //}
 
-        //[Authorize(Roles = AccountController.ADMIN)]
-        //public IActionResult Create()
-        //{
-        //    return View();
-        //}
-
-        //[Authorize(Roles = AccountController.ADMIN)]
-        //public IActionResult Delete()
-        //{
-        //    return View();
-        //}
-
-        //[Authorize(Roles = AccountController.ADMIN)]
-        //public IActionResult Edit()
-        //{
-        //    return View();
-        //}
     }
 }
