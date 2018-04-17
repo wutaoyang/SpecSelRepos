@@ -57,20 +57,22 @@
         <dt>
             @Html.DisplayNameFor(model => model.SpecSelResult.Output)
         </dt>
-        <dd>
-            @Html.DisplayFor(model => model.SpecSelResult.Output)
-        </dd>
+            <dd>
+                <pre>@Html.DisplayFor(model => model.SpecSelResult.Output)</pre>
+            </dd>
         <dt>
             @Html.DisplayNameFor(model => model.SpecSelResult.Input)
         </dt>
-        <dd>
-            @Html.DisplayFor(model => model.SpecSelResult.Input)
-        </dd>
+        <div class="inputTable">
+            <dd>
+                <pre>@Html.DisplayFor(model => model.SpecSelResult.Input)</pre>
+            </dd>
+        </div>
     </dl>
-    
-    <form method="post">
-        <input type="hidden" asp-for="SpecSelResult.ID" />
-        <input type="submit" value="Delete" class="btn btn-default" /> |
-        <a asp-page="./Index">Back to List</a>
-    </form>
-</div>
+
+            <form method="post">
+                <input type="hidden" asp-for="SpecSelResult.ID" />
+                <input type="submit" value="Delete" class="btn btn-default" /> |
+                <a asp-page="./Index">Back to List</a>
+            </form>
+        </div>
