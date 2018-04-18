@@ -7,6 +7,8 @@ using Microsoft.Extensions.DependencyInjection;
 using SpecSelRepos.Data;
 using SpecSelRepos.Models;
 using SpecSelRepos.Services;
+using System;
+using System.Diagnostics;
 
 namespace SpecSelRepos
 {
@@ -62,6 +64,11 @@ namespace SpecSelRepos
                     name: "default",
                     template: "{controller=Home}/{action=Index}/{id?}");
             });
+
+
+
+
+
         }
     }
 }
