@@ -17,10 +17,11 @@ the username entered for the admin user). A message should appear saying that th
 admin. Log out and back into the admin account. You will now see an 'Admin' link in the menu bar at the 
 top of the page. Clicking on this allows new roles to be created and for roles to be added or removed 
 from users.
-This process creates the admin and user roles which cannot be deleted. Users can hold multiple roles. An
-admin may manage roles of users but cannot edit the spec sel results database. A user can edit the 
-database but cannot manage roles. A user with both roles may do either. A person who registers but has no
-assigned roles may view the database but cannot make any site modifications.
+This process creates the admin, user and email roles which cannot be deleted. Users can hold multiple 
+roles. An admin may manage roles of users but cannot edit the specselrepos results database. A user can 
+edit the database but cannot manage roles. A user with both roles may do either. When a new user registers, 
+an email is send to all holders of the email role. A person who registers but has no assigned roles may 
+view the database but cannot make any site modifications.
 
 Regards
 mre16utu@uea.ac.uk
