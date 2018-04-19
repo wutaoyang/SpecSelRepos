@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Net.Mail;
 using System.Security.Claims;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Authentication;
@@ -19,6 +20,7 @@ namespace SpecSelRepos.Controllers
     {
         public const string ADMIN = "admin";
         public const string USER = "user";
+        public const string EMAILER = "email";// users who receive email after user registers
         private readonly UserManager<ApplicationUser> _userManager;
         private readonly SignInManager<ApplicationUser> _signInManager;
         private readonly RoleManager<IdentityRole> _roleManager;
@@ -68,7 +70,7 @@ namespace SpecSelRepos.Controllers
                 }
                 else
                 {
-                    if (role != ADMIN && role != USER)// dont delete admin or user role
+                    if (role != ADMIN && role != USER && role != EMAILER)// dont delete admin, user or email role
                     {
                         IdentityRole iRole = await _roleManager.FindByNameAsync(role);
                         await _roleManager.DeleteAsync(iRole);//delete role
@@ -99,6 +101,30 @@ namespace SpecSelRepos.Controllers
                 return RedirectToAction("ManageRoles", "Account");
             }
             return Content("User " + email + " does not hold role " + role);
+        }
+
+        [Authorize(Roles = ADMIN)]
+        public async Task<IActionResult> DeleteUser(string email)
+        {
+            ApplicationUser user = GetUserByEmail(email);
+            if (null == user)
+            {
+                return Json("No user with username: " + email);
+            }
+            else
+            {
+                IList<string> roles = GetUserRoles(user);
+                if(roles.Count == 0)
+                {
+                    await _userManager.DeleteAsync(user);
+                    return RedirectToAction("ManageRoles", "Account");
+                }
+                else
+                {
+                    return Content("Please remove user from roles before deletion");
+                }
+                
+            }
         }
 
         /// <summary>
@@ -136,7 +162,7 @@ namespace SpecSelRepos.Controllers
                 }
                 else
                 {
-                    return Content("User is in role: " + role + ": " + GetUserRoles(user));
+                    return Content("User is in role: " + role + ": " + GetUserRolesString(user));
                 }
             }
             else
@@ -145,10 +171,15 @@ namespace SpecSelRepos.Controllers
             }
         }
 
-        private string GetUserRoles(ApplicationUser user)
+        private string GetUserRolesString(ApplicationUser user)
         {
-            IList<string> list = _userManager.GetRolesAsync(user).Result;
+            IList<string> list = GetUserRoles(user);
             return ListToString(list);
+        }
+
+        private IList<string> GetUserRoles(ApplicationUser user)
+        {
+            return _userManager.GetRolesAsync(user).Result;
         }
 
         private string ListToString(IList<string> list)
@@ -161,6 +192,11 @@ namespace SpecSelRepos.Controllers
         private ApplicationUser GetUserByEmail(string email)
         {
             return _userManager.FindByEmailAsync(email).Result;
+        }
+
+        private IList<ApplicationUser> GetUsersByRole(string role)
+        {
+            return _userManager.GetUsersInRoleAsync(role).Result;
         }
 
         /// <summary>
@@ -179,6 +215,7 @@ namespace SpecSelRepos.Controllers
                 {
                     await _roleManager.CreateAsync(new IdentityRole(ADMIN));//create role
                     await _roleManager.CreateAsync(new IdentityRole(USER));//create role
+                    await _roleManager.CreateAsync(new IdentityRole(EMAILER));//create role
                 }
                 // assign admin role to email user
                 await AssignRole(email, ADMIN);
@@ -396,6 +433,7 @@ namespace SpecSelRepos.Controllers
                     await _emailSender.SendEmailConfirmationAsync(model.Email, callbackUrl);
 
                     await _signInManager.SignInAsync(user, isPersistent: false);
+                    EmailToAdministrator(model.Email);
                     _logger.LogInformation("User created a new account with password.");
                     return RedirectToLocal(returnUrl);
                 }
@@ -404,6 +442,60 @@ namespace SpecSelRepos.Controllers
 
             // If we got this far, something failed, redisplay form
             return View(model);
+        }
+
+        /// <summary>
+        /// Email 
+        /// </summary>
+        /// <param name="email"></param>
+        private void EmailToAdministrator(string email)
+        {
+            IList<ApplicationUser> usersToEmail = GetUsersByRole(EMAILER);
+            SendGmail(usersToEmail, "User " + email + " has registered to SpecSelRepos. Please assign roles.");
+        }
+
+        /// <summary>
+        /// Send email to each user in list using specselrepos@gmail account
+        /// </summary>
+        /// <param name="usersToEmail"></param>
+        /// <param name="content"></param>
+        private void SendGmail(IList<ApplicationUser> usersToEmail, string content)
+        {
+            if(usersToEmail.Count > 0)
+            {
+                MailMessage mail = new MailMessage();
+                foreach (ApplicationUser user in usersToEmail)
+                {
+                    var email = user.Email;
+                    mail.To.Add(new MailAddress(email));
+                }
+                mail.From = new MailAddress("specselrepos@gmail.com", "SpecSelRepos", System.Text.Encoding.UTF8);
+                mail.Subject = "SpecSel New User";
+                mail.SubjectEncoding = System.Text.Encoding.UTF8;
+                mail.Body = content;
+                mail.BodyEncoding = System.Text.Encoding.UTF8;
+                mail.IsBodyHtml = true;
+                mail.Priority = MailPriority.Normal;
+                SmtpClient client = new SmtpClient();
+                client.Credentials = new System.Net.NetworkCredential("specselrepos@gmail.com", "Pa55word#");
+                client.Port = 587;
+                client.Host = "smtp.gmail.com";
+                client.EnableSsl = true;
+                try
+                {
+                    client.Send(mail);
+                }
+                catch (Exception ex)
+                {
+                    Exception ex2 = ex;
+                    string errorMessage = string.Empty;
+                    while (ex2 != null)
+                    {
+                        errorMessage += ex2.ToString();
+                        ex2 = ex2.InnerException;
+                    }
+                }
+            }
         }
 
         [HttpPost]

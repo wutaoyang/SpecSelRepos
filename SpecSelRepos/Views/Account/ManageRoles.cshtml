@@ -49,6 +49,17 @@
         }
     </fieldset>
 
+    <fieldset>
+        @using (Html.BeginForm("DeleteUser", "Account", FormMethod.Get))
+        {
+        <span>
+            <label for="email">Users:</label>
+            @Html.DropDownList("email", @Model.Users)
+        </span>
+        <input type="submit" value="Delete User" name="deleteUser" />
+        }
+    </fieldset>
+
     <h2>Roles</h2>
 
     @foreach (var role in Model.Roles)
