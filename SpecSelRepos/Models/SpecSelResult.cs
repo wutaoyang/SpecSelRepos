@@ -3,6 +3,9 @@ using System.ComponentModel.DataAnnotations;
 
 namespace SpecSelRepos.Models
 {
+    /// <summary>
+    /// Defines the structure of entries made to the Species Selection Results Database
+    /// </summary>
     public class SpecSelResult
     {
         public int ID { get; set; }
