@@ -33,7 +33,7 @@
                     <li><a asp-area="" asp-controller="SpecSelResults" asp-action="Index">Database</a></li>
                     <li><a asp-area="" asp-controller="Home" asp-action="About">About</a></li>
                     <li><a asp-area="" asp-controller="Home" asp-action="Contact">Contact</a></li>
-                    @if (User.IsInRole("admin"))
+                    @if (User.IsInRole(SpecSelRepos.Controllers.AccountController.ADMIN))
                     {
                     <li><a asp-area="" asp-controller="Account" asp-action="ManageRoles">Admin</a></li>
                     }

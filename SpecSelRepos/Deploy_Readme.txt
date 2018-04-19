@@ -17,9 +17,10 @@ the username entered for the admin user). A message should appear saying that th
 admin. Log out and back into the admin account. You will now see an 'Admin' link in the menu bar at the 
 top of the page. Clicking on this allows new roles to be created and for roles to be added or removed 
 from users.
-
-As of 19/4/2018, users may view the content of the database but cannot apply any edits. Admins may create 
-new entries to the database and edit or delete them.
+This process creates the admin and user roles which cannot be deleted. Users can hold multiple roles. An
+admin may manage roles of users but cannot edit the spec sel results database. A user can edit the 
+database but cannot manage roles. A user with both roles may do either. A person who registers but has no
+assigned roles may view the database but cannot make any site modifications.
 
 Regards
 mre16utu@uea.ac.uk

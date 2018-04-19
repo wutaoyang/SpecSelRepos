@@ -8,7 +8,7 @@ using SpecSelRepos.Models;
 
 namespace SpecSelRepos.Pages.SpecSelResults
 {
-    [Authorize(Roles = AccountController.ADMIN)]
+    [Authorize(Roles = AccountController.USER)]
     public class DeleteModel : PageModel
     {
         private readonly SpecSelRepos.Models.SpecSelResultContext _context;

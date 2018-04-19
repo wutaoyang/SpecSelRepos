@@ -70,7 +70,7 @@
     </dl>
 </div>
 <div>
-    @if (User.IsInRole("admin"))
+    @if (User.IsInRole(SpecSelRepos.Controllers.AccountController.USER))
     {
     <a asp-page="./Edit" asp-route-id="@Model.SpecSelResult.ID">Edit</a> <a>|</a>
     }

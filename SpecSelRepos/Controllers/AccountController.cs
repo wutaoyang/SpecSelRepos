@@ -18,6 +18,7 @@ namespace SpecSelRepos.Controllers
     public class AccountController : Controller
     {
         public const string ADMIN = "admin";
+        public const string USER = "user";
         private readonly UserManager<ApplicationUser> _userManager;
         private readonly SignInManager<ApplicationUser> _signInManager;
         private readonly RoleManager<IdentityRole> _roleManager;
@@ -38,6 +39,8 @@ namespace SpecSelRepos.Controllers
             _emailSender = emailSender;
             _logger = logger;
         }
+
+        //public static string UserStr { get { return USER; } }
 
         [Authorize(Roles = ADMIN)]
         public IActionResult ManageRoles()
@@ -65,7 +68,7 @@ namespace SpecSelRepos.Controllers
                 }
                 else
                 {
-                    if (role != ADMIN)// dont delete admin role
+                    if (role != ADMIN && role != USER)// dont delete admin or user role
                     {
                         IdentityRole iRole = await _roleManager.FindByNameAsync(role);
                         await _roleManager.DeleteAsync(iRole);//delete role
@@ -93,9 +96,6 @@ namespace SpecSelRepos.Controllers
             if (await _userManager.IsInRoleAsync(user, role))
             {
                 await _userManager.RemoveFromRoleAsync(user, role);
-                //IList<string> userRoles = await _userManager.GetRolesAsync(user);
-                //string message = "User: " + email + " has roles: " + ListToString(userRoles);
-                //return Content(message);
                 return RedirectToAction("ManageRoles", "Account");
             }
             return Content("User " + email + " does not hold role " + role);
@@ -178,10 +178,11 @@ namespace SpecSelRepos.Controllers
                 if (!await _roleManager.RoleExistsAsync(ADMIN))
                 {
                     await _roleManager.CreateAsync(new IdentityRole(ADMIN));//create role
+                    await _roleManager.CreateAsync(new IdentityRole(USER));//create role
                 }
                 // assign admin role to email user
                 await AssignRole(email, ADMIN);
-                return Content("User " + email + " is now the first site "+ ADMIN +". If logged in, please log out and back in to activate admin privileges.");
+                return Content("User " + email + " is now the first site " + ADMIN + ". If logged in, please log out and back in to activate admin privileges.");
             }
             return Json("An admin exists - Contact admin to modify user privileges.");
         }

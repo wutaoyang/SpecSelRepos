@@ -7,7 +7,7 @@
 
 <h2>Index</h2>
 
-@if (User.IsInRole("admin"))
+@if (User.IsInRole(SpecSelRepos.Controllers.AccountController.USER))
 {
     <p>
         <a asp-page="Create">Create New</a>
@@ -81,7 +81,7 @@
                 </td>
                 <td>
                     <a asp-page="./Details" asp-route-id="@item.ID">Details</a>
-                    @if (User.IsInRole("admin"))
+                    @if (User.IsInRole(SpecSelRepos.Controllers.AccountController.USER))
                     {
                         <a>|</a>
                         <a asp-page="./Edit" asp-route-id="@item.ID">Edit</a> <a>|</a>

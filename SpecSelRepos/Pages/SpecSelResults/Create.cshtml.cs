@@ -1,17 +1,13 @@
-using System;
-using System.Collections.Generic;
-using System.Linq;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.RazorPages;
-using Microsoft.AspNetCore.Mvc.Rendering;
 using SpecSelRepos.Controllers;
 using SpecSelRepos.Models;
 
 namespace SpecSelRepos.Pages.SpecSelResults
 {
-    [Authorize(Roles = AccountController.ADMIN)]
+    [Authorize(Roles = AccountController.USER)]
 
     public class CreateModel : PageModel
     {
