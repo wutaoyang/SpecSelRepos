@@ -42,8 +42,10 @@ namespace SpecSelRepos.Controllers
             _logger = logger;
         }
 
-        //public static string UserStr { get { return USER; } }
-
+        /// <summary>
+        /// Launches the user and role management page for admin users
+        /// </summary>
+        /// <returns></returns>
         [Authorize(Roles = ADMIN)]
         public IActionResult ManageRoles()
         {
@@ -103,6 +105,11 @@ namespace SpecSelRepos.Controllers
             return Content("User " + email + " does not hold role " + role);
         }
 
+        /// <summary>
+        /// Deletes user from the database if they hold no roles
+        /// </summary>
+        /// <param name="email"></param>
+        /// <returns></returns>
         [Authorize(Roles = ADMIN)]
         public async Task<IActionResult> DeleteUser(string email)
         {
@@ -123,7 +130,6 @@ namespace SpecSelRepos.Controllers
                 {
                     return Content("Please remove user from roles before deletion");
                 }
-                
             }
         }
 
